@@ -1,0 +1,19 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.habicode.hostapi">
+
+    <application
+        android:allowBackup="true"
+        android:label="HabiCode Host API"
+        android:supportsRtl="true">
+
+        <!-- Broadcast Receiver untuk menerima perintah dari Termux -->
+        <receiver
+            android:name=".HostApiReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.habicode.hostapi.SHOW_KEYBOARD" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>
