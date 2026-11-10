@@ -5,20 +5,31 @@ use jni::EnvUnowned;
 #[no_mangle]
 fn android_main(app: AndroidApp) {
     android_logger::init_once(
-        android_logger::Config::default().with_min_level(log::Level::Debug),
+        android_logger::Config::default().with_max_level(log::Level::Debug),
     );
     
     log::info!("HabiCode Host API started successfully via android-activity.");
 
-    // Simpan instance app atau jalankan event loop utama
+    // Loop event utama dengan penanganan poll_events yang kompatibel
     loop {
         app.poll_events(Some(std::time::Duration::from_millis(100)), |event| {
             match event {
-                android_activity::Event::InitWindow { .. } => {
-                    log::info!("Native window initialized.");
+                android_activity::PollEvent::Wake => {
+                    log::info!("App woken up.");
                 }
-                android_activity::Event::TermWindow { .. } => {
-                    log::info!("Native window terminated.");
+                android_activity::PollEvent::Timeout => {
+                    // Timeout rutin per 100ms
+                }
+                android_activity::PollEvent::Main(main_event) => {
+                    match main_event {
+                        android_activity::MainEvent::InitWindow { .. } => {
+                            log::info!("Native window initialized.");
+                        }
+                        android_activity::MainEvent::TermWindow { .. } => {
+                            log::info!("Native window terminated.");
+                        }
+                        _ => {}
+                    }
                 }
                 _ => {}
             }
@@ -26,8 +37,8 @@ fn android_main(app: AndroidApp) {
     }
 }
 
-/// Contoh fungsi JNI cadangan jika ingin dipanggil dari sisi Android/Java
-#[unsafe(no_mangle)]
+/// Fungsi JNI untuk callback keyboard
+#[no_mangle]
 pub extern "system" fn Java_com_habicode_hostapi_HostApiBridge_nativeShowKeyboard(
     _unowned_env: EnvUnowned<'_>,
     _class: JClass,
@@ -35,7 +46,8 @@ pub extern "system" fn Java_com_habicode_hostapi_HostApiBridge_nativeShowKeyboar
     log::info!("JNI call: nativeShowKeyboard triggered.");
 }
 
-#[unsafe(no_mangle)]
+/// Fungsi JNI untuk clipboard
+#[no_mangle]
 pub extern "system" fn Java_com_habicode_hostapi_HostApiBridge_nativeSetClipboard(
     mut unowned_env: EnvUnowned<'_>,
     _class: JClass,
