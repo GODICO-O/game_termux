@@ -13,6 +13,8 @@ android-activity = { version = "0.6", features = ["native-activity"] }
 android_logger = "0.15"
 log = "0.4"
 libc = "0.2"
+ndk = "0.9"
+ndk-context = "0.1"
 
 [package.metadata.android]
 package = "com.habicode.hostapi"
@@ -29,7 +31,6 @@ label = "HabiCode Host API"
 config_changes = "orientation|keyboardHidden|screenSize"
 launch_mode = "singleTask"
 
-# Intent-filter agar aplikasi muncul di App Drawer sebagai ikon normal
 [[package.metadata.android.application.activity.intent_filter]]
 actions = ["android.intent.action.MAIN"]
 categories = ["android.intent.category.LAUNCHER"]
