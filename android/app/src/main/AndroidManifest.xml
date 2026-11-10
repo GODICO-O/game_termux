@@ -2,11 +2,21 @@
     package="com.habicode.hostapi">
 
     <application
+        android:label="Host API"
         android:allowBackup="true"
-        android:label="HabiCode Host API"
-        android:supportsRtl="true">
+        android:theme="@android:style/Theme.NoDisplay">
+        
+        <!-- MainActivity agar aplikasi terdaftar sebagai app normal -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-        <!-- Broadcast Receiver untuk menerima perintah dari Termux -->
+        <!-- BroadcastReceiver untuk menangkap sinyal dari Termux -->
         <receiver
             android:name=".HostApiReceiver"
             android:exported="true">
