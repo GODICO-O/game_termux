@@ -3,7 +3,6 @@ package com.habicode.hostapi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.view.inputmethod.InputMethodManager;
 import android.util.Log;
 
 public class HostApiReceiver extends BroadcastReceiver {
@@ -11,21 +10,18 @@ public class HostApiReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent == null) {
-            Log.e(TAG, "Received null intent");
-            return;
-        }
-
+        if (intent == null) return;
+        
         String action = intent.getAction();
         Log.d(TAG, "Received broadcast action: " + action);
 
         if ("com.habicode.hostapi.SHOW_KEYBOARD".equals(action)) {
-            try {
-                // Memanggil HostApiBridge seperti ala Termux-API
-                HostApiBridge.showKeyboard(context);
-            } catch (Exception e) {
-                Log.e(TAG, "Error handling SHOW_KEYBOARD broadcast", e);
-            }
+            Log.d(TAG, "Triggering nativeShowKeyboard from Rust...");
+            // Panggil fungsi native Rust yang sudah kita siapkan
+            nativeShowKeyboardFromJava();
         }
     }
+
+    // Deklarasi native method yang terhubung ke libhost_api.so
+    private native static void nativeShowKeyboardFromJava();
 }
