@@ -3,11 +3,7 @@ name: Build Pure Rust APK
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'src/**'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - '.github/workflows/host-api.yml'
+    branches: [ main ]
 
 jobs:
   build:
